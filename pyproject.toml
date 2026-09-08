@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mechprops-extractor"
+version = "0.1.0"
+description = "Extract Young's modulus, ultimate point, and break-point from stress-strain curves"
+authors = [{ name = "wyatthoho", email = "wyatthoho@gmail.com" }]
+dependencies = ["pandas == 2.3.3", "matplotlib == 3.10.8", "scipy == 1.16.3"]
+requires-python = ">=3.12"
+readme = "README.md"
+license = { file = "LICENSE" }
+
+[tool.setuptools]
+package-dir = { "" = "src" }
