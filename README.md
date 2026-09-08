@@ -15,6 +15,12 @@ RMSProp-based curve fit, or break-point detection.
 ## Installation
 
 ```bash
+pip install mechprops-extractor
+```
+
+For development (editable install):
+
+```bash
 pip install -e .
 ```
 
