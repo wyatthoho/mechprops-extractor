@@ -47,12 +47,16 @@ class StressStrainCurve:
         self.strain_norm = self.strain_raw / self.ultimate_x
         self.stress_norm = self.stress_raw / self.ultimate_y
 
-    def find_ultimate_point(self, show: bool = True) -> tuple[float, float]:
+    def find_ultimate_point(
+        self, show: bool = True, save_path: str | None = None
+    ) -> tuple[float, float]:
         """Returns the (strain, stress) at maximum stress, the ultimate
         point of the curve.
 
         Args:
             show: Plots the ultimate point over the raw input curve.
+            save_path: If given (and show is True), saves the plot as a PNG
+                to this path.
 
         Returns:
             The (strain, stress) of the ultimate point in raw units.
@@ -60,16 +64,18 @@ class StressStrainCurve:
         ultimate_point = (self.ultimate_x, self.ultimate_y)
         if show:
             graph = UltimatePointGraph(self.strain_raw, self.stress_raw, ultimate_point)
-            graph.show()
+            graph.show(save_path)
 
         return ultimate_point
 
-    def fit_modulus_iso527(self, show: bool = True) -> float:
+    def fit_modulus_iso527(self, show: bool = True, save_path: str | None = None) -> float:
         """Fits modulus via ISO 527 linear regression over the
         [STRAIN_LOWER, STRAIN_UPPER] strain range.
 
         Args:
             show: Plots the fitted secant line over the raw input curve.
+            save_path: If given (and show is True), saves the plot as a PNG
+                to this path.
 
         Raises:
             ValueError: Fewer than 2 raw strain samples fall in the range.
@@ -88,7 +94,7 @@ class StressStrainCurve:
         if show:
             secant = m * xs + shift
             graph = Iso527Graph(xs, ys, secant, m)
-            graph.show()
+            graph.show(save_path)
 
         return m
 
@@ -97,6 +103,7 @@ class StressStrainCurve:
         tol: float = DEFAULT_TOL,
         max_iter: int = DEFAULT_MAX_ITER,
         show: bool = True,
+        save_path: str | None = None,
     ) -> float:
         """Fits modulus by using RMSProp to minimize the area enclosed between
         the normalized curve and its secant line.
@@ -105,6 +112,8 @@ class StressStrainCurve:
             tol: Stops iterating once the relative change in modulus is below this.
             max_iter: Maximum number of RMSProp iterations to run.
             show: Plays an animation of the fitting process.
+            save_path: If given (and show is True), saves the final animation
+                frame as a PNG to this path.
 
         Returns:
             The fitted modulus, rescaled back to raw strain/stress units.
@@ -141,7 +150,7 @@ class StressStrainCurve:
 
         if show:
             ani = RmsPropAnimation(xs, ys, m_records, lr_records, loss_records)
-            ani.play()
+            ani.play(save_path)
 
         return m_scale
 
@@ -149,6 +158,7 @@ class StressStrainCurve:
         self,
         threshold: float = BREAK_THRESHOLD,
         show: bool = True,
+        save_path: str | None = None,
     ) -> tuple[float, float]:
         """Locates the first point where the normalized stress curve's slope
         drops below -threshold, signaling the specimen break.
@@ -157,6 +167,8 @@ class StressStrainCurve:
             threshold: Slope drop (in normalized stress per sample) that
                 signals a break.
             show: Plots the detected break point over the normalized curve.
+            save_path: If given (and show is True), saves the plot as a PNG
+                to this path.
 
         Returns:
             The (strain, stress) of the break point in raw units, or the last
@@ -172,7 +184,7 @@ class StressStrainCurve:
         if show:
             break_pt_norm = float(xs[position]), float(ys[position])
             graph = BreakDetectGraph(xs, ys, gradient, threshold, break_pt_norm)
-            graph.show()
+            graph.show(save_path)
 
         return float(self.strain_raw[position]), float(self.stress_raw[position])
 

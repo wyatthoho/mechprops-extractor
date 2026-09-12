@@ -198,7 +198,7 @@ class RmsPropAnimation:
         self._loss_marker.set_offsets(np.array([[rid, self.loss_records[rid]]]))
         self._ax_norm.set_ybound(*self.initial_ybound)
 
-    def play(self) -> None:
+    def play(self, save_path: str | None = None) -> None:
         self._rids = self._get_record_indices()
         self._ani = animation.FuncAnimation(
             fig=self._fig,
@@ -209,6 +209,8 @@ class RmsPropAnimation:
             repeat=False,
         )
         _show_figure(self._fig)
+        if save_path:
+            self._fig.savefig(save_path)
 
 
 class Iso527Graph:
@@ -257,7 +259,9 @@ class Iso527Graph:
         ax.set_ybound(*ybound)
         ax.legend()
 
-    def show(self) -> None:
+    def show(self, save_path: str | None = None) -> None:
+        if save_path:
+            self._fig.savefig(save_path)
         _show_figure(self._fig)
 
 
@@ -307,7 +311,9 @@ class UltimatePointGraph:
         ax.grid(True)
         ax.legend()
 
-    def show(self) -> None:
+    def show(self, save_path: str | None = None) -> None:
+        if save_path:
+            self._fig.savefig(save_path)
         _show_figure(self._fig)
 
 
@@ -374,5 +380,7 @@ class BreakDetectGraph:
         self._ax_break.grid(True)
         self._ax_break.set(xlabel="Normalized Strain", ylabel="Gradient")
 
-    def show(self) -> None:
+    def show(self, save_path: str | None = None) -> None:
+        if save_path:
+            self._fig.savefig(save_path)
         _show_figure(self._fig)

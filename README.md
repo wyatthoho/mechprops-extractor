@@ -46,4 +46,5 @@ curve.find_break_point()        # (strain, stress) at the detected break point
 
 Each method returns its computed value and, by default, opens a plot window
 illustrating the result — close it to continue. Pass `show=False` to skip the
-plot and get the value only.
+plot and get the value only. Pass `save_path="path/to/file.png"` to save the
+plot as a PNG (in addition to displaying it).
