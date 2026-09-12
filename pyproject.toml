@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mechprops-extractor"
-version = "0.1.0"
+version = "0.2.0"
 description = "Extract Young's modulus, ultimate point, and break-point from stress-strain curves"
 authors = [{ name = "wyatthoho", email = "wyatthoho@gmail.com" }]
 dependencies = ["numpy >= 2.0", "matplotlib >= 3.10", "scipy >= 1.16"]
