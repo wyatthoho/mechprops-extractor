@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 from matplotlib import animation
 from matplotlib.collections import PathCollection, PolyCollection
 from matplotlib.lines import Line2D
@@ -38,16 +37,16 @@ HEIGHT_RATIOS_BREAK = [2.4, 0.8]
 Point = tuple[float, float]
 
 
-def _get_secant_line(modulus: float, strain: pd.Series, stress: pd.Series) -> pd.Series:
+def _get_secant_line(modulus: float, strain: np.ndarray, stress: np.ndarray) -> np.ndarray:
     """Calculates a secant line pinned directly to the initial data point."""
-    intercept = stress.values[0] - modulus * strain.values[0]
+    intercept = stress[0] - modulus * strain[0]
     return modulus * strain + intercept
 
 
-def _get_annotation_pos(strain: pd.Series, secant: pd.Series) -> Point:
+def _get_annotation_pos(strain: np.ndarray, secant: np.ndarray) -> Point:
     """Determines a stable, indexed coordinate for placing text annotations."""
     idx = max(1, len(strain) // SECANT_POSITION_DIVISOR)
-    return float(strain.iloc[idx]), float(secant.iloc[idx])
+    return float(strain[idx]), float(secant[idx])
 
 
 def _show_figure(fig: plt.Figure) -> None:
@@ -75,8 +74,8 @@ class RmsPropAnimation:
 
     def __init__(
         self,
-        strain: pd.Series,
-        stress: pd.Series,
+        strain: np.ndarray,
+        stress: np.ndarray,
         m_records: list[float],
         lr_records: list[float],
         loss_records: list[float],
@@ -220,9 +219,9 @@ class Iso527Graph:
 
     def __init__(
         self,
-        strain: pd.Series,
-        stress: pd.Series,
-        secant: pd.Series,
+        strain: np.ndarray,
+        stress: np.ndarray,
+        secant: np.ndarray,
         m: float,
     ):
         self._fig, ax = plt.subplots(figsize=FIG_SIZE_ISO527, tight_layout=True)
@@ -270,8 +269,8 @@ class UltimatePointGraph:
 
     def __init__(
         self,
-        strain: pd.Series,
-        stress: pd.Series,
+        strain: np.ndarray,
+        stress: np.ndarray,
         ultimate_point: Point,
     ):
         self._fig, ax = plt.subplots(figsize=FIG_SIZE_ULTIMATE, tight_layout=True)
@@ -322,8 +321,8 @@ class BreakDetectGraph:
 
     def __init__(
         self,
-        strain: pd.Series,
-        stress: pd.Series,
+        strain: np.ndarray,
+        stress: np.ndarray,
         bindex: np.ndarray,
         threshold: float,
         break_point: tuple[float, float],

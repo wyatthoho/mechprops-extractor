@@ -26,17 +26,17 @@ pip install -e .
 
 ## Usage
 
-Load a stress-strain CSV (`strain`, `stress` columns) into a `StressStrainCurve`,
-then call any combination of its analysis methods. The example below uses one
-of the sample datasets bundled in [`data/`](data):
+Pass your strain and stress data (any array-like: list, tuple, NumPy array,
+pandas Series, ...) into a `StressStrainCurve`, then call any combination of
+its analysis methods:
 
 ```python
-import pandas as pd
-
 from mechprops import StressStrainCurve
 
-df = pd.read_csv("data/polyimide-stress-strain.csv")
-curve = StressStrainCurve(df["strain"], df["stress"])
+strain = [0.0000, 0.0005, 0.0010, 0.0015, 0.0020, 0.0025, 0.0030, 0.0035]
+stress = [0.1, 12.5, 24.9, 36.9, 46.8, 54.9, 58.1, 51.1]
+
+curve = StressStrainCurve(strain, stress)
 
 curve.fit_modulus_iso527()      # Young's modulus via ISO 527 linear regression
 curve.fit_modulus_rmsprop()     # Young's modulus via RMSProp area minimization

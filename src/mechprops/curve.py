@@ -1,5 +1,5 @@
 import numpy as np
-import pandas as pd
+from numpy.typing import ArrayLike
 from scipy import integrate, stats
 
 from mechprops.plotter import (
@@ -34,13 +34,13 @@ class StressStrainCurve:
 
     def __init__(
         self,
-        strain: pd.Series,
-        stress: pd.Series,
+        strain: ArrayLike,
+        stress: ArrayLike,
     ) -> None:
-        self.strain_raw = strain
-        self.stress_raw = stress
+        self.strain_raw = np.asarray(strain, dtype=float)
+        self.stress_raw = np.asarray(stress, dtype=float)
 
-        idx = int(self.stress_raw.idxmax())
+        idx = int(np.argmax(self.stress_raw))
         self.ultimate_x = float(self.strain_raw[idx])
         self.ultimate_y = float(self.stress_raw[idx])
 
@@ -77,7 +77,7 @@ class StressStrainCurve:
         xs = self.strain_raw
         ys = self.stress_raw
 
-        target = xs.between(STRAIN_LOWER, STRAIN_UPPER)
+        target = (xs >= STRAIN_LOWER) & (xs <= STRAIN_UPPER)
         if target.sum() < 2:
             raise ValueError("Not enough raw strain data in the range for regression.")
 
@@ -115,8 +115,8 @@ class StressStrainCurve:
         xs = self.strain_norm
         ys = self.stress_norm
 
-        x0 = float(self.strain_norm.iloc[0])
-        y0 = float(self.stress_norm.iloc[0])
+        x0 = float(self.strain_norm[0])
+        y0 = float(self.stress_norm[0])
 
         m_records = []
         loss_records = []
@@ -168,18 +168,17 @@ class StressStrainCurve:
         gradient = -np.gradient(ys)
         positions = np.where(gradient > threshold)[0]
         position = int(positions[0]) if positions.size > 0 else -1
-        label = int(xs.index[position])
 
         if show:
-            break_pt_norm = float(xs[label]), float(ys[label])
+            break_pt_norm = float(xs[position]), float(ys[position])
             graph = BreakDetectGraph(xs, ys, gradient, threshold, break_pt_norm)
             graph.show()
 
-        return float(self.strain_raw[label]), float(self.stress_raw[label])
+        return float(self.strain_raw[position]), float(self.stress_raw[position])
 
     @staticmethod
     def _compute_enclosed_area(
-        m: float, x0: float, y0: float, xs: pd.Series, ys: pd.Series
+        m: float, x0: float, y0: float, xs: np.ndarray, ys: np.ndarray
     ) -> float:
         shift = y0 - m * x0
         secant = m * xs + shift
