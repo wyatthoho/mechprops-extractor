@@ -52,8 +52,13 @@ def _get_annotation_pos(strain: np.ndarray, secant: np.ndarray) -> Point:
 def _show_figure(fig: plt.Figure) -> None:
     """Displays only the given figure, leaving any other open figures untouched."""
     fig.canvas.manager.show()
-    fig.canvas.mpl_connect("close_event", lambda _: fig.canvas.stop_event_loop())
-    fig.canvas.start_event_loop()
+    # Polling `fignum_exists` (instead of waiting on a "close_event" callback)
+    # is backend-agnostic: on the macosx backend, clicking the native close
+    # button never fires "close_event" (FigureManagerMac._close_button_pressed
+    # only calls Gcf.destroy), which used to leave start_event_loop() blocked
+    # forever and prevented any subsequent figure from being shown.
+    while plt.fignum_exists(fig.number):
+        fig.canvas.start_event_loop(0.1)
 
 
 class RmsPropAnimation:
