@@ -96,14 +96,14 @@ def new_ax(title: str):
     return fig, ax
 
 
-fig, ax = new_ax("Comparison of Young's Modulus From Three Different Methods")
+fig, ax = new_ax("Comparison of Young's Modulus From Different Methods")
 ax.plot(
     xs,
     secant_naive,
     ":",
     color="gray",
     linewidth=3.5,
-    alpha=0.8,
+    alpha=0.55,
     label=f"Initial Slope, E={m_naive:.0f} MPa",
 )
 ax.plot(
@@ -112,8 +112,8 @@ ax.plot(
     "-.",
     color="gray",
     linewidth=3.5,
-    alpha=0.8,
-    label=f"ISO527, E={m_iso527:.0f} MPa",
+    alpha=0.55,
+    label=f"ISO 527, E={m_iso527:.0f} MPa",
 )
 ax.plot(
     xs,
