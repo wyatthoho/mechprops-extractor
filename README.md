@@ -38,10 +38,24 @@ stress = [0.1, 12.5, 24.9, 36.9, 46.8, 54.9, 58.1, 51.1]
 
 curve = StressStrainCurve(strain, stress)
 
-curve.fit_modulus_iso527()      # Young's modulus via ISO 527 linear regression
-curve.fit_modulus_rmsprop()     # Young's modulus via RMSProp area minimization
-curve.find_ultimate_point()     # (strain, stress) at the ultimate (peak stress) point
-curve.find_break_point()        # (strain, stress) at the detected break point
+modulus_iso527 = curve.fit_modulus_iso527()
+modulus_rmsprop = curve.fit_modulus_rmsprop()
+ultimate_strain, ultimate_stress = curve.find_ultimate_point()
+break_strain, break_stress = curve.find_break_point()
+
+print(f"Modulus (ISO 527): {modulus_iso527:.2f}")
+print(f"Modulus (RMSProp): {modulus_rmsprop:.2f}")
+print(f"Ultimate point: strain={ultimate_strain:.4f}, stress={ultimate_stress:.2f}")
+print(f"Break point: strain={break_strain:.4f}, stress={break_stress:.2f}")
+```
+
+Output:
+
+```
+Modulus (ISO 527): 21340.00
+Modulus (RMSProp): 24868.47
+Ultimate point: strain=0.0030, stress=58.10
+Break point: strain=0.0035, stress=51.10
 ```
 
 Each method returns its computed value and, by default, opens a plot window

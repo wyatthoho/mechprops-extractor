@@ -303,7 +303,7 @@ class UltimatePointGraph:
             zorder=MARKER_ZORDER,
         )
         ax.annotate(
-            f"({ux:.2f}, {uy:.2f})",
+            f"({ux:.4f}, {uy:.2f})",
             xy=(ux, uy),
             xytext=ANNOTATION_OFFSET_RIGHT,
             textcoords="offset points",
@@ -370,7 +370,7 @@ class BreakDetectGraph:
             zorder=MARKER_ZORDER,
         )
         self._ax_norm.annotate(
-            f"({bx:.2f}, {by:.2f})",
+            f"({bx:.3f}, {by:.2f})",
             xy=(bx, by),
             xytext=ANNOTATION_OFFSET_RIGHT,
             textcoords="offset points",
