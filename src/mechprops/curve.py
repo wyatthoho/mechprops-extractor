@@ -93,7 +93,7 @@ class StressStrainCurve:
 
         if show:
             secant = m * xs + shift
-            graph = Iso527Graph(xs, ys, secant, m)
+            graph = Iso527Graph(xs, ys, secant, m, STRAIN_LOWER, STRAIN_UPPER)
             graph.show(save_path)
 
         return m

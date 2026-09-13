@@ -26,6 +26,8 @@ PROGRESS_MARKER_EDGECOLOR = "white"
 
 # Iso527Graph constants
 FIG_SIZE_ISO527 = (4.8, 3.6)
+COLOR_WINDOW = "gray"
+WINDOW_FILL_ALPHA = 0.15
 
 # UltimatePointGraph constants
 FIG_SIZE_ULTIMATE = (4.8, 3.6)
@@ -230,6 +232,8 @@ class Iso527Graph:
         stress: np.ndarray,
         secant: np.ndarray,
         m: float,
+        strain_lower: float,
+        strain_upper: float,
     ):
         self._fig, ax = plt.subplots(figsize=FIG_SIZE_ISO527, tight_layout=True)
 
@@ -241,6 +245,14 @@ class Iso527Graph:
             color=COLOR_BLUE,
         )
         ybound = ax.get_ybound()
+
+        ax.axvspan(
+            strain_lower,
+            strain_upper,
+            color=COLOR_WINDOW,
+            alpha=WINDOW_FILL_ALPHA,
+            label="Regression Window",
+        )
 
         ax.plot(
             strain,
