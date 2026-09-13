@@ -30,5 +30,8 @@ classifiers = [
 Homepage = "https://github.com/wyatthoho/mechprops-extractor"
 Repository = "https://github.com/wyatthoho/mechprops-extractor"
 
+[project.optional-dependencies]
+test = ["pytest"]
+
 [tool.setuptools]
 package-dir = { "" = "src" }
