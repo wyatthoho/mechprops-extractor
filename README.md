@@ -18,26 +18,6 @@ RMSProp-based curve fit, or break-point detection.
 pip install mechprops-extractor
 ```
 
-## Testing
-
-Install the test dependencies (editable install, with the `test` extra):
-
-```bash
-pip install -e ".[test]"
-```
-
-Activate your virtual environment, then run pytest directly:
-
-```bash
-# Windows (PowerShell)
-.\venv\Scripts\Activate.ps1
-pytest
-
-# macOS / Linux
-source venv/bin/activate
-pytest
-```
-
 ## Usage
 
 Pass your strain and stress data (any array-like: list, tuple, NumPy array,
