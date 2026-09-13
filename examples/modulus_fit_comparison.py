@@ -5,6 +5,8 @@ Renders a single overlay chart of all three secant lines against the raw
 curve.
 """
 
+import textwrap
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -122,7 +124,26 @@ ax.plot(
     alpha=0.6,
     label=f"RMSProp, E={m_rmsprop:.0f} MPa",
 )
-ax.legend(fontsize=8, loc="best")
+ax.legend(fontsize=8, loc="best", handlelength=4)
+
+
+def annotate_line(x: float, y: float, color: str, text: str, wrap: int = 25) -> None:
+    """Labels a secant line directly on the plot, near the given x."""
+    ax.annotate(
+        textwrap.fill(text, width=wrap),
+        xy=(x, y),
+        xytext=(6, 6),
+        textcoords="offset points",
+        color=color,
+        fontsize=9,
+        fontweight="normal",
+    )
+
+
+annotate_line(0.0015, 6.4, "gray", "Slope calculated from the first 2 points.")
+annotate_line(0.0018, 30.0, "gray", "Slope regressed over the standard-defined strain range, e.g., ISO 527 (0.0005-0.0025).", wrap=32)
+annotate_line(0.0000, 26.0, "fuchsia", "Slope fitted using the RMSProp optimization algorithm.")
+
 fig.savefig("examples/modulus_fit_comparison.png", dpi=150)
 
 
